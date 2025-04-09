@@ -1,6 +1,7 @@
 
 import { Client, Order, OrderProduct, OrderStatus, PaymentMethod } from "@/types";
 import { format, addDays } from "date-fns";
+import { mockProducts } from "./mock-data/products";
 
 // Mock Clients
 export const mockClients: Client[] = [
@@ -10,6 +11,9 @@ export const mockClients: Client[] = [
     tradingName: "TechSoft",
     legalName: "Empresa de Tecnologia Tech Ltda",
     taxId: "12.345.678/0001-99",
+    email: "contato@techsoft.com",
+    phone: "(11) 4321-9876",
+    address: "Av. Tecnologia, 123 - São Paulo/SP",
     createdAt: new Date("2023-01-15"),
   },
   {
@@ -18,6 +22,9 @@ export const mockClients: Client[] = [
     tradingName: "Mercado Central",
     legalName: "Comércio Local de Alimentos S.A.",
     taxId: "98.765.432/0001-01",
+    email: "contato@mercadocentral.com",
+    phone: "(11) 1234-5678",
+    address: "Rua do Comércio, 456 - São Paulo/SP",
     createdAt: new Date("2023-02-20"),
   },
   {
@@ -26,6 +33,9 @@ export const mockClients: Client[] = [
     tradingName: "ABC Construtora",
     legalName: "Construções e Reformas ABC Ltda",
     taxId: "45.678.901/0001-23",
+    email: "contato@abcconstrucoes.com",
+    phone: "(11) 9876-5432",
+    address: "Rua da Construção, 789 - São Paulo/SP",
     createdAt: new Date("2023-03-10"),
   },
 ];
@@ -35,17 +45,19 @@ const createMockOrderProducts = (): OrderProduct[] => {
   return [
     {
       id: `p${Math.floor(Math.random() * 1000)}`,
-      name: "Design de Website",
-      unitPrice: 3500,
+      productId: mockProducts[0].id,
+      name: mockProducts[0].name,
+      unitPrice: mockProducts[0].price,
       quantity: 1,
-      totalPrice: 3500,
+      totalPrice: mockProducts[0].price,
     },
     {
       id: `p${Math.floor(Math.random() * 1000)}`,
-      name: "Manutenção Mensal",
-      unitPrice: 750,
+      productId: mockProducts[2].id,
+      name: mockProducts[2].name,
+      unitPrice: mockProducts[2].price,
       quantity: 12,
-      totalPrice: 9000,
+      totalPrice: mockProducts[2].price * 12,
     },
   ];
 };
@@ -70,6 +82,7 @@ export const mockOrders: Order[] = mockClients.flatMap((client) =>
       status,
       paymentMethod,
       totalAmount,
+      notes: i % 2 === 0 ? "Entrega urgente" : "Cliente preferencial",
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -126,3 +139,6 @@ export const getStatusColor = (status: OrderStatus): string => {
   };
   return colorMap[status];
 };
+
+// Export products for direct use
+export { mockProducts, getProductById } from "./mock-data/products";
