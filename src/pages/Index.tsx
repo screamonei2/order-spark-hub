@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
 
 const Dashboard = () => {
@@ -151,7 +151,10 @@ const Dashboard = () => {
               <Package className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{totalOrders}</div>
+              <div className="text-4xl font-bold">{totalOrders}</div>
+              <p className="text-xs text-muted-foreground mt-1">
+                pedidos registrados
+              </p>
             </CardContent>
           </Card>
           <Card>
@@ -162,7 +165,10 @@ const Dashboard = () => {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{totalClients}</div>
+              <div className="text-4xl font-bold">{totalClients}</div>
+              <p className="text-xs text-muted-foreground mt-1">
+                clientes atendidos
+              </p>
             </CardContent>
           </Card>
           <Card>
@@ -173,7 +179,10 @@ const Dashboard = () => {
               <CheckCircle className="h-4 w-4 text-green-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{totalApproved}</div>
+              <div className="text-4xl font-bold text-green-600">{totalApproved}</div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {totalOrders > 0 ? `${Math.round((totalApproved / totalOrders) * 100)}% dos pedidos` : '0% dos pedidos'}
+              </p>
             </CardContent>
           </Card>
           <Card>
@@ -184,7 +193,10 @@ const Dashboard = () => {
               <AlertCircle className="h-4 w-4 text-yellow-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{totalPending}</div>
+              <div className="text-4xl font-bold text-yellow-600">{totalPending}</div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {totalOrders > 0 ? `${Math.round((totalPending / totalOrders) * 100)}% dos pedidos` : '0% dos pedidos'}
+              </p>
             </CardContent>
           </Card>
         </div>

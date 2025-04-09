@@ -8,16 +8,27 @@ import { Plus, Search, MoreHorizontal } from "lucide-react";
 import { mockClients } from "@/lib/mock-data";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import NewClientModal from "@/components/clients/NewClientModal";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import ClientDetails from "@/components/clients/ClientDetails";
 
 const Clients = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isNewClientModalOpen, setIsNewClientModalOpen] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<string | null>(null);
   
   const filteredClients = mockClients.filter(
     (client) =>
       client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       client.taxId.includes(searchTerm)
   );
+
+  const handleViewDetails = (clientId: string) => {
+    setSelectedClient(clientId);
+  };
+
+  const handleCloseDetails = () => {
+    setSelectedClient(null);
+  };
 
   return (
     <AppLayout>
@@ -60,7 +71,11 @@ const Clients = () => {
             </TableHeader>
             <TableBody>
               {filteredClients.map((client) => (
-                <TableRow key={client.id}>
+                <TableRow 
+                  key={client.id} 
+                  className="cursor-pointer hover:bg-muted/50"
+                  onClick={() => handleViewDetails(client.id)}
+                >
                   <TableCell className="font-medium">
                     <div>
                       <div>{client.name}</div>
@@ -78,7 +93,7 @@ const Clients = () => {
                       <div className="text-sm">{client.phone}</div>
                     )}
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon">
@@ -87,7 +102,6 @@ const Clients = () => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Visualizar detalhes</DropdownMenuItem>
                         <DropdownMenuItem>Editar cliente</DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive">
                           Excluir cliente
@@ -107,6 +121,13 @@ const Clients = () => {
         open={isNewClientModalOpen} 
         onOpenChange={setIsNewClientModalOpen} 
       />
+
+      {/* Client Details Sheet */}
+      <Sheet open={!!selectedClient} onOpenChange={handleCloseDetails}>
+        <SheetContent className="w-full sm:max-w-md">
+          {selectedClient && <ClientDetails clientId={selectedClient} onClose={handleCloseDetails} />}
+        </SheetContent>
+      </Sheet>
     </AppLayout>
   );
 };

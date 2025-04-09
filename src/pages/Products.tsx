@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { mockProducts, formatCurrency } from "@/lib/mock-data";
-import { Search, Plus, Edit, MoreHorizontal, Eye } from "lucide-react";
+import { Search, Plus, MoreHorizontal } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,6 +22,7 @@ import {
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import ProductDetails from "@/components/products/ProductDetails";
 import NewProductModal from "@/components/products/NewProductModal";
+import { toast } from "sonner";
 
 const Products = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -41,6 +42,17 @@ const Products = () => {
 
   const handleCloseDetails = () => {
     setSelectedProduct(null);
+  };
+
+  const handleDeleteProduct = (productId: string) => {
+    // In a real app, you would call an API to delete the product
+    toast.success("Produto excluído com sucesso!");
+    // Here we would normally update the state to remove the product
+  };
+
+  const handleUpdateStock = (productId: string) => {
+    // In a real app, you would open a modal to update stock
+    toast.success("Estoque atualizado com sucesso!");
   };
 
   return (
@@ -86,41 +98,44 @@ const Products = () => {
             </TableHeader>
             <TableBody>
               {filteredProducts.map((product) => (
-                <TableRow key={product.id}>
+                <TableRow 
+                  key={product.id}
+                  className="cursor-pointer hover:bg-muted/50"
+                  onClick={() => handleViewDetails(product.id)}
+                >
                   <TableCell className="font-medium">{product.name}</TableCell>
                   <TableCell>{product.category}</TableCell>
                   <TableCell>{product.sku || "-"}</TableCell>
                   <TableCell>{formatCurrency(product.price)}</TableCell>
                   <TableCell>{product.stock || "N/A"}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <Button variant="ghost" size="icon" onClick={() => handleViewDetails(product.id)}>
-                        <Eye className="h-4 w-4" />
-                        <span className="sr-only">Detalhes</span>
-                      </Button>
-                      <Button variant="ghost" size="icon" asChild>
-                        <a href={`/products/${product.id}/edit`}>
-                          <Edit className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </a>
-                      </Button>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Mais opções</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            Atualizar estoque
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="text-destructive">
-                            Excluir produto
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
+                  <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Mais opções</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleViewDetails(product.id)}>
+                          Visualizar detalhes
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <a href={`/products/${product.id}/edit`}>
+                            Editar produto
+                          </a>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleUpdateStock(product.id)}>
+                          Atualizar estoque
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          className="text-destructive" 
+                          onClick={() => handleDeleteProduct(product.id)}
+                        >
+                          Excluir produto
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))}

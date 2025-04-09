@@ -9,6 +9,7 @@ import {
 import { Client } from "@/types";
 import { toast } from "sonner";
 import ClientForm from "./ClientForm";
+import { mockClients } from "@/lib/mock-data";
 
 interface NewClientModalProps {
   open: boolean;
@@ -18,7 +19,18 @@ interface NewClientModalProps {
 const NewClientModal: React.FC<NewClientModalProps> = ({ open, onOpenChange }) => {
   const handleSubmit = (values: Omit<Client, "id" | "createdAt">) => {
     console.log("New client values:", values);
-    // Here you would normally submit to an API
+    
+    // In a real app, you would call an API to create the client
+    // For now, we'll just simulate adding the client to the mock data
+    const newClient: Client = {
+      ...values,
+      id: `c${mockClients.length + 1}`,
+      createdAt: new Date(),
+    };
+    
+    // Here you would normally add the client to your state or context
+    console.log("New client created:", newClient);
+    
     toast.success("Cliente cadastrado com sucesso!");
     onOpenChange(false);
   };
