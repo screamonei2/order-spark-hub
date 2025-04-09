@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table";
 import StatusBadge from "@/components/ui/status-badge";
 import { mockOrders, formatCurrency, formatDate, getClientById } from "@/lib/mock-data";
-import { Search, CheckCircle, XCircle, FileText, Eye, MoreHorizontal } from "lucide-react";
+import { Search, CheckCircle, XCircle, FileText, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -59,7 +59,8 @@ const Approvals = () => {
     }
   };
   
-  const handleSelectOrder = (orderId: string) => {
+  const handleSelectOrder = (orderId: string, event: React.MouseEvent) => {
+    event.stopPropagation();
     setSelectedOrders(prev => 
       prev.includes(orderId) 
         ? prev.filter(id => id !== orderId)
@@ -97,14 +98,7 @@ const Approvals = () => {
               Gerencie os pedidos que estão aguardando aprovação dos clientes.
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" asChild>
-              <Link to="/approvals/history">Histórico</Link>
-            </Button>
-            <Button asChild>
-              <Link to="/approvals/send">Enviar para Aprovação</Link>
-            </Button>
-          </div>
+          {/* Removed "Histórico" and "Enviar para Aprovação" buttons */}
         </div>
 
         <div className="flex flex-col gap-4 md:flex-row">
@@ -160,11 +154,16 @@ const Approvals = () => {
                 filteredOrders.map((order) => {
                   const client = getClientById(order.clientId);
                   return (
-                    <TableRow key={order.id}>
-                      <TableCell>
+                    <TableRow 
+                      key={order.id} 
+                      className="cursor-pointer hover:bg-muted/50"
+                      onClick={() => handleViewDetails(order.id)}
+                    >
+                      <TableCell onClick={(e) => e.stopPropagation()}>
                         <Checkbox 
                           checked={selectedOrders.includes(order.id)}
-                          onCheckedChange={() => handleSelectOrder(order.id)}
+                          onCheckedChange={() => {}}
+                          onClick={(e) => handleSelectOrder(order.id, e)}
                           aria-label={`Selecionar pedido ${order.id}`}
                         />
                       </TableCell>
@@ -177,14 +176,16 @@ const Approvals = () => {
                       <TableCell>{formatDate(order.deliveryDate)}</TableCell>
                       <TableCell>{formatCurrency(order.totalAmount)}</TableCell>
                       <TableCell>
-                        <StatusBadge status={order.status} />
+                        <StatusBadge 
+                          status={order.status} 
+                          onChange={(newStatus) => {
+                            // Stop propagation to prevent row click
+                            order.status = newStatus;
+                          }} 
+                        />
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-center justify-end gap-2">
-                          <Button variant="ghost" size="icon" onClick={() => handleViewDetails(order.id)}>
-                            <Eye className="h-4 w-4" />
-                            <span className="sr-only">Detalhes</span>
-                          </Button>
                           <Button variant="ghost" size="icon" asChild>
                             <Link to={`/orders/${order.id}/pdf`}>
                               <FileText className="h-4 w-4" />
@@ -199,12 +200,14 @@ const Approvals = () => {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem onClick={() => {
+                              <DropdownMenuItem onClick={(e) => {
+                                e.stopPropagation();
                                 toast.success(`Pedido aprovado: ${order.id}`);
                               }}>
                                 Aprovar
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => {
+                              <DropdownMenuItem onClick={(e) => {
+                                e.stopPropagation();
                                 toast.error(`Pedido rejeitado: ${order.id}`);
                               }} className="text-destructive">
                                 Rejeitar

@@ -15,9 +15,10 @@ import {
 
 interface OrdersTableProps {
   orders: Order[];
+  onViewDetails?: (orderId: string) => void;
 }
 
-const OrdersTable: React.FC<OrdersTableProps> = ({ orders }) => {
+const OrdersTable: React.FC<OrdersTableProps> = ({ orders, onViewDetails }) => {
   return (
     <div className="relative overflow-x-auto rounded-lg border bg-card">
       <div className="hidden grid-cols-orders gap-4 p-4 text-sm font-medium text-muted-foreground md:grid border-b">
@@ -34,7 +35,8 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders }) => {
           return (
             <div
               key={order.id}
-              className="grid grid-cols-1 md:grid-cols-orders gap-4 p-4 text-sm"
+              className="grid grid-cols-1 md:grid-cols-orders gap-4 p-4 text-sm cursor-pointer hover:bg-muted/50"
+              onClick={() => onViewDetails && onViewDetails(order.id)}
             >
               <div className="flex flex-col">
                 <div className="font-medium">
@@ -51,12 +53,17 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders }) => {
               <div className="flex items-center">
                 {getPaymentMethodText(order.paymentMethod)}
               </div>
-              <div className="flex items-center">
-                <StatusBadge status={order.status} />
+              <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
+                <StatusBadge 
+                  status={order.status} 
+                  onChange={(newStatus) => {
+                    order.status = newStatus;
+                  }}
+                />
               </div>
-              <div className="flex items-center justify-end gap-2">
+              <div className="flex items-center justify-end gap-2" onClick={(e) => e.stopPropagation()}>
                 <Button variant="ghost" size="icon" asChild>
-                  <Link to={`/orders/${order.id}`}>
+                  <Link to={`/orders/${order.id}/edit`}>
                     <Edit className="h-4 w-4" />
                     <span className="sr-only">Editar</span>
                   </Link>
@@ -75,11 +82,6 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders }) => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                      <Link to={`/orders/${order.id}/approve`}>
-                        Solicitar aprovação
-                      </Link>
-                    </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link to={`/orders/${order.id}/duplicate`}>
                         Duplicar pedido

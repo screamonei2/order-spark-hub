@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { Order } from "@/types";
 import { getClientById, formatCurrency, formatDate } from "@/lib/mock-data";
 import StatusBadge from "@/components/ui/status-badge";
-import { Eye, FileText, Edit } from "lucide-react";
+import { FileText, Edit } from "lucide-react";
 
 interface OrderCardProps {
   order: Order;
@@ -17,11 +17,17 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onViewDetails }) => {
   const client = getClientById(order.clientId);
 
   return (
-    <Card>
+    <Card className={onViewDetails ? "cursor-pointer hover:bg-muted/40" : ""} onClick={onViewDetails}>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">{client?.name}</CardTitle>
-          <StatusBadge status={order.status} />
+          <StatusBadge 
+            status={order.status} 
+            onChange={onViewDetails ? undefined : (newStatus) => {
+              // Only enable status change if not in a clickable card (dashboard)
+              order.status = newStatus;
+            }}
+          />
         </div>
       </CardHeader>
       <CardContent className="grid gap-3">
@@ -51,20 +57,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onViewDetails }) => {
           <p className="text-sm">{formatDate(order.deliveryDate)}</p>
         </div>
       </CardContent>
-      <CardFooter className="flex gap-2 border-t bg-muted/40 p-3">
-        {onViewDetails ? (
-          <Button size="sm" variant="outline" onClick={onViewDetails} className="flex-1">
-            <Eye className="mr-2 h-4 w-4" />
-            Detalhes
-          </Button>
-        ) : (
-          <Button size="sm" variant="outline" asChild className="flex-1">
-            <Link to={`/orders/${order.id}`}>
-              <Eye className="mr-2 h-4 w-4" />
-              Detalhes
-            </Link>
-          </Button>
-        )}
+      <CardFooter className="flex gap-2 border-t bg-muted/40 p-3" onClick={(e) => e.stopPropagation()}>
         <Button size="sm" variant="outline" asChild className="flex-1">
           <Link to={`/orders/${order.id}/edit`}>
             <Edit className="mr-2 h-4 w-4" />

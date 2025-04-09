@@ -1,27 +1,24 @@
 
-import React from "react";
+import React, { useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { mockClients, formatDate } from "@/lib/mock-data";
-import { Link } from "react-router-dom";
-import { Search, Plus, Edit, FileText, MoreHorizontal } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Plus, Search, MoreHorizontal } from "lucide-react";
+import { mockClients } from "@/lib/mock-data";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import NewClientModal from "@/components/clients/NewClientModal";
 
 const Clients = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isNewClientModalOpen, setIsNewClientModalOpen] = useState(false);
+  
+  const filteredClients = mockClients.filter(
+    (client) =>
+      client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      client.taxId.includes(searchTerm)
+  );
+
   return (
     <AppLayout>
       <div className="flex flex-col gap-6">
@@ -29,24 +26,24 @@ const Clients = () => {
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Clientes</h1>
             <p className="text-muted-foreground">
-              Gerencie os clientes para seus pedidos.
+              Gerencie todos os clientes cadastrados no sistema.
             </p>
           </div>
-          <Button asChild>
-            <Link to="/clients/new">
-              <Plus className="mr-2 h-4 w-4" />
-              Novo Cliente
-            </Link>
+          <Button onClick={() => setIsNewClientModalOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" />
+            Novo Cliente
           </Button>
         </div>
 
-        <div className="flex flex-col gap-4 md:flex-row md:items-center">
+        <div className="flex flex-col gap-4 md:flex-row">
           <div className="relative flex-1">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
               placeholder="Buscar clientes..."
               className="pl-8"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
@@ -55,60 +52,48 @@ const Clients = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Nome do Cliente</TableHead>
-                <TableHead>Nome Fantasia</TableHead>
-                <TableHead>Razão Social</TableHead>
+                <TableHead>Nome</TableHead>
                 <TableHead>CNPJ</TableHead>
-                <TableHead>Data de Cadastro</TableHead>
+                <TableHead>Contato</TableHead>
                 <TableHead className="text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {mockClients.map((client) => (
+              {filteredClients.map((client) => (
                 <TableRow key={client.id}>
-                  <TableCell className="font-medium">{client.name}</TableCell>
-                  <TableCell>{client.tradingName}</TableCell>
-                  <TableCell>{client.legalName}</TableCell>
-                  <TableCell>{client.taxId}</TableCell>
-                  <TableCell>{formatDate(client.createdAt)}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <Button variant="ghost" size="icon" asChild>
-                        <Link to={`/clients/${client.id}`}>
-                          <Edit className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Link>
-                      </Button>
-                      <Button variant="ghost" size="icon" asChild>
-                        <Link to={`/clients/${client.id}/orders`}>
-                          <FileText className="h-4 w-4" />
-                          <span className="sr-only">Pedidos</span>
-                        </Link>
-                      </Button>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Mais opções</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild>
-                            <Link to={`/clients/${client.id}/edit`}>
-                              Editar cliente
-                            </Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem asChild>
-                            <Link to={`/orders/new?client=${client.id}`}>
-                              Criar pedido
-                            </Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="text-destructive">
-                            Excluir cliente
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                  <TableCell className="font-medium">
+                    <div>
+                      <div>{client.name}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {client.tradingName}
+                      </div>
                     </div>
+                  </TableCell>
+                  <TableCell>{client.taxId}</TableCell>
+                  <TableCell>
+                    {client.email && (
+                      <div className="text-sm">{client.email}</div>
+                    )}
+                    {client.phone && (
+                      <div className="text-sm">{client.phone}</div>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Abrir menu</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem>Visualizar detalhes</DropdownMenuItem>
+                        <DropdownMenuItem>Editar cliente</DropdownMenuItem>
+                        <DropdownMenuItem className="text-destructive">
+                          Excluir cliente
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))}
@@ -116,6 +101,12 @@ const Clients = () => {
           </Table>
         </div>
       </div>
+      
+      {/* New Client Modal */}
+      <NewClientModal 
+        open={isNewClientModalOpen} 
+        onOpenChange={setIsNewClientModalOpen} 
+      />
     </AppLayout>
   );
 };

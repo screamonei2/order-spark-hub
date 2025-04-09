@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
@@ -7,7 +6,6 @@ import { TabsContent, Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import OrderCard from "@/components/orders/OrderCard";
 import { mockOrders, formatDate } from "@/lib/mock-data";
 import { Package, Users, CheckCircle, AlertCircle, CalendarIcon } from "lucide-react";
-import { Link } from "react-router-dom";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import OrderDetails from "@/components/orders/OrderDetails";
 import { addDays, isAfter, isBefore, isWithinInterval, startOfDay, endOfDay } from "date-fns";
@@ -18,31 +16,29 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { DateRange } from "react-day-picker";
 
 const Dashboard = () => {
-  const [dateRange, setDateRange] = useState<{
-    from: Date | undefined;
-    to: Date | undefined;
-  }>({
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: undefined,
     to: undefined,
   });
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
   
-  const filteredOrders = dateRange.from || dateRange.to
+  const filteredOrders = dateRange?.from || dateRange?.to
     ? mockOrders.filter(order => {
-        if (dateRange.from && dateRange.to) {
+        if (dateRange?.from && dateRange?.to) {
           return isWithinInterval(order.createdAt, {
             start: startOfDay(dateRange.from),
             end: endOfDay(dateRange.to)
           });
         }
         
-        if (dateRange.from && !dateRange.to) {
+        if (dateRange?.from && !dateRange?.to) {
           return isAfter(order.createdAt, startOfDay(dateRange.from));
         }
         
-        if (!dateRange.from && dateRange.to) {
+        if (!dateRange?.from && dateRange?.to) {
           return isBefore(order.createdAt, endOfDay(dateRange.to));
         }
         
@@ -81,7 +77,7 @@ const Dashboard = () => {
               <PopoverTrigger asChild>
                 <Button variant="outline" className="w-auto justify-start text-left font-normal">
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {dateRange.from ? (
+                  {dateRange?.from ? (
                     dateRange.to ? (
                       <>
                         {formatDate(dateRange.from)} - {formatDate(dateRange.to)}
@@ -107,7 +103,7 @@ const Dashboard = () => {
                 <div className="flex items-center justify-between p-3 border-t">
                   <Button
                     variant="ghost"
-                    onClick={() => setDateRange({ from: undefined, to: undefined })}
+                    onClick={() => setDateRange(undefined)}
                     size="sm"
                   >
                     Limpar
@@ -143,9 +139,6 @@ const Dashboard = () => {
                 </div>
               </PopoverContent>
             </Popover>
-            <Button asChild>
-              <Link to="/orders/new">Novo Pedido</Link>
-            </Button>
           </div>
         </div>
 
@@ -259,7 +252,6 @@ const Dashboard = () => {
         </Tabs>
       </div>
       
-      {/* Order Details Side Sheet */}
       <Sheet open={!!selectedOrder} onOpenChange={handleCloseOrderDetails}>
         <SheetContent className="w-full sm:max-w-md md:max-w-lg">
           {selectedOrder && <OrderDetails orderId={selectedOrder} onClose={handleCloseOrderDetails} />}

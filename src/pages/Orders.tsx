@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table";
 import StatusBadge from "@/components/ui/status-badge";
 import { mockOrders, formatCurrency, formatDate, getClientById, getPaymentMethodText } from "@/lib/mock-data";
-import { Search, Plus, Edit, FileText, MoreHorizontal, Eye } from "lucide-react";
+import { Search, Plus, Edit, FileText, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   DropdownMenu,
@@ -94,7 +94,11 @@ const Orders = () => {
               {filteredOrders.map((order) => {
                 const client = getClientById(order.clientId);
                 return (
-                  <TableRow key={order.id}>
+                  <TableRow 
+                    key={order.id} 
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => handleViewDetails(order.id)}
+                  >
                     <TableCell className="font-medium">{client?.name}</TableCell>
                     <TableCell>
                       {order.products.length > 0 
@@ -105,14 +109,13 @@ const Orders = () => {
                     <TableCell>{formatCurrency(order.totalAmount)}</TableCell>
                     <TableCell>{getPaymentMethodText(order.paymentMethod)}</TableCell>
                     <TableCell>
-                      <StatusBadge status={order.status} />
+                      <StatusBadge status={order.status} onChange={(newStatus) => {
+                        // This prevents the row click event from firing
+                        order.status = newStatus;
+                      }} />
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                       <div className="flex items-center justify-end gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => handleViewDetails(order.id)}>
-                          <Eye className="h-4 w-4" />
-                          <span className="sr-only">Detalhes</span>
-                        </Button>
                         <Button variant="ghost" size="icon" asChild>
                           <Link to={`/orders/${order.id}/edit`}>
                             <Edit className="h-4 w-4" />
@@ -133,11 +136,6 @@ const Orders = () => {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem asChild>
-                              <Link to={`/orders/${order.id}/approve`}>
-                                Solicitar aprovação
-                              </Link>
-                            </DropdownMenuItem>
                             <DropdownMenuItem asChild>
                               <Link to={`/orders/${order.id}/duplicate`}>
                                 Duplicar pedido
