@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Orders from "./pages/Orders";
 import NewOrder from "./pages/NewOrder";
 import Clients from "./pages/Clients";
+import Products from "./pages/Products";
 import Approvals from "./pages/Approvals";
 import Reports from "./pages/Reports";
 import OrderPdf from "./pages/OrderPdf";
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/orders/new" element={<NewOrder />} />
           <Route path="/orders/:id/pdf" element={<OrderPdf />} />
           <Route path="/clients" element={<Clients />} />
+          <Route path="/products" element={<Products />} />
           <Route path="/approvals" element={<Approvals />} />
           <Route path="/reports" element={<Reports />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
