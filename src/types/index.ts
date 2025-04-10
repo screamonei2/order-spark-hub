@@ -1,75 +1,57 @@
 
-
-export interface Client {
-  id: string;
-  name: string;
-  tradingName: string;
-  legalName: string;
-  taxId: string;
-  email?: string;
-  phone?: string;
-  address?: string;
-  notes?: string;
-  createdAt: Date;
-}
-
-export interface Product {
-  id: string;
-  name: string;
-  description?: string;
-  category: string;
-  price: number;
-  costPrice?: number;
-  sku?: string;
-  stock?: number;
-  createdAt: Date;
-}
+export type OrderStatus = "draft" | "pending" | "approved" | "rejected" | "in_progress" | "completed" | "cancelled";
+export type PaymentMethod = "cash" | "credit_card" | "bank_transfer" | "pix" | "boleto";
 
 export interface OrderProduct {
   id: string;
-  productId?: string; // Adding this field to fix the type errors
+  productId: string;
   name: string;
   quantity: number;
   unitPrice: number;
   totalPrice: number;
 }
 
-export type OrderStatus = "draft" | "pending" | "approved" | "in_progress" | "completed" | "cancelled" | "rejected";
-export type PaymentMethod = "credit_card" | "bank_transfer" | "cash" | "pix" | "boleto";
-
 export interface Order {
   id: string;
   clientId: string;
   products: OrderProduct[];
+  totalAmount: number;
   status: OrderStatus;
   paymentMethod: PaymentMethod;
-  totalAmount: number;
+  deliveryDate: Date;
   notes?: string;
   createdAt: Date;
-  deliveryDate: Date;
+  updatedAt: Date;
 }
 
-export interface Report {
+export interface Product {
   id: string;
-  title: string;
+  name: string;
   description: string;
-  type: "sales" | "inventory" | "clients";
-  dateRange: {
-    start: Date;
-    end: Date;
-  };
-  data: any; // This will depend on the report type
+  price: number;
+  costPrice?: number;
+  category: string;
+  sku: string;
+  stock: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Client {
+  id: string;
+  name: string;
+  tradingName?: string;
+  legalName?: string;
+  taxId: string;
+  email: string;
+  phone: string;
+  address: string;
   createdAt: Date;
 }
 
-export interface ApprovalRequest {
-  id: string;
-  orderId: string;
-  requestedBy: string;
-  requestedAt: Date;
-  status: "pending" | "approved" | "rejected";
-  approvedBy?: string;
-  approvedAt?: Date;
-  comments?: string;
+export interface NavItem {
+  title: string;
+  icon: React.ReactNode;
+  href: string;
+  active: boolean;
 }
-

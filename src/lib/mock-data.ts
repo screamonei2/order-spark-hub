@@ -47,23 +47,23 @@ const createMockOrderProducts = (): OrderProduct[] => {
       id: `p${Math.floor(Math.random() * 1000)}`,
       productId: mockProducts[0].id,
       name: mockProducts[0].name,
-      unitPrice: mockProducts[0].price,
       quantity: 1,
+      unitPrice: mockProducts[0].price,
       totalPrice: mockProducts[0].price,
     },
     {
       id: `p${Math.floor(Math.random() * 1000)}`,
       productId: mockProducts[2].id,
       name: mockProducts[2].name,
-      unitPrice: mockProducts[2].price,
       quantity: 12,
+      unitPrice: mockProducts[2].price,
       totalPrice: mockProducts[2].price * 12,
     },
   ];
 };
 
 // Mock payment methods
-const paymentMethods: PaymentMethod[] = ["cash", "credit_card", "bank_transfer", "pix"];
+const paymentMethods: PaymentMethod[] = ["cash", "credit_card", "bank_transfer", "pix", "boleto"];
 
 // Mock Orders
 export const mockOrders: Order[] = mockClients.flatMap((client) =>
