@@ -1,4 +1,5 @@
 
+
 export interface Client {
   id: string;
   name: string;
@@ -26,13 +27,14 @@ export interface Product {
 
 export interface OrderProduct {
   id: string;
+  productId?: string; // Adding this field to fix the type errors
   name: string;
   quantity: number;
   unitPrice: number;
   totalPrice: number;
 }
 
-export type OrderStatus = "pending" | "approved" | "in_progress" | "completed" | "cancelled";
+export type OrderStatus = "draft" | "pending" | "approved" | "in_progress" | "completed" | "cancelled" | "rejected";
 export type PaymentMethod = "credit_card" | "bank_transfer" | "cash" | "pix" | "boleto";
 
 export interface Order {
@@ -70,3 +72,4 @@ export interface ApprovalRequest {
   approvedAt?: Date;
   comments?: string;
 }
+
