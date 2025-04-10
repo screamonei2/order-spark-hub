@@ -71,6 +71,7 @@ const NewOrder = () => {
       ...orderProducts,
       {
         id: `temp-${Date.now()}`,
+        productId: "", // Adding the required field
         name: "",
         unitPrice: 0,
         quantity: 1,

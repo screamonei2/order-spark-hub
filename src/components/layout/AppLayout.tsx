@@ -8,6 +8,7 @@ import { NavItem } from "@/types";
 import DesktopSidebar from "./DesktopSidebar";
 import MobileMenu from "./MobileMenu";
 import MainContent from "./MainContent";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -70,35 +71,37 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   ];
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      {/* Mobile Sidebar */}
-      {isMobile && (
-        <MobileMenu
-          isOpen={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
-          sidebarItems={sidebarItems}
-          handleLogout={handleLogout}
-          user={user}
-        />
-      )}
+    <SidebarProvider>
+      <div className="flex h-screen overflow-hidden bg-background w-full">
+        {/* Mobile Sidebar */}
+        {isMobile && (
+          <MobileMenu
+            isOpen={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+            sidebarItems={sidebarItems}
+            handleLogout={handleLogout}
+            user={user}
+          />
+        )}
 
-      {/* Desktop Sidebar */}
-      {!isMobile && (
-        <DesktopSidebar
-          sidebarItems={sidebarItems}
-          handleLogout={handleLogout}
-          user={user}
-        />
-      )}
+        {/* Desktop Sidebar */}
+        {!isMobile && (
+          <DesktopSidebar
+            sidebarItems={sidebarItems}
+            handleLogout={handleLogout}
+            user={user}
+          />
+        )}
 
-      {/* Main Content */}
-      <MainContent 
-        isMobile={isMobile} 
-        onMenuOpen={() => setSidebarOpen(true)}
-      >
-        {children}
-      </MainContent>
-    </div>
+        {/* Main Content */}
+        <MainContent 
+          isMobile={isMobile} 
+          onMenuOpen={() => setSidebarOpen(true)}
+        >
+          {children}
+        </MainContent>
+      </div>
+    </SidebarProvider>
   );
 };
 

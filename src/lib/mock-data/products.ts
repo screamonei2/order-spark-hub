@@ -11,6 +11,7 @@ export const mockProducts: Product[] = [
     sku: "DSN-WEB-001",
     stock: 999,
     createdAt: new Date("2023-01-10"),
+    updatedAt: new Date("2023-01-10"),
   },
   {
     id: "p2",
@@ -21,6 +22,7 @@ export const mockProducts: Product[] = [
     sku: "DEV-APP-001",
     stock: 999,
     createdAt: new Date("2023-01-15"),
+    updatedAt: new Date("2023-01-15"),
   },
   {
     id: "p3",
@@ -31,6 +33,7 @@ export const mockProducts: Product[] = [
     sku: "SRV-MNT-001",
     stock: 999,
     createdAt: new Date("2023-01-20"),
+    updatedAt: new Date("2023-01-20"),
   },
   {
     id: "p4",
@@ -41,6 +44,7 @@ export const mockProducts: Product[] = [
     sku: "INF-HSP-001",
     stock: 999,
     createdAt: new Date("2023-01-25"),
+    updatedAt: new Date("2023-01-25"),
   },
   {
     id: "p5",
@@ -51,6 +55,7 @@ export const mockProducts: Product[] = [
     sku: "MKT-CMP-001",
     stock: 999,
     createdAt: new Date("2023-02-01"),
+    updatedAt: new Date("2023-02-01"),
   }
 ];
 

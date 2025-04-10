@@ -1,35 +1,20 @@
+// Re-export all types
+export * from './client.d';
+export type NavItem = {
+  title: string;
+  href: string;
+  icon: React.ReactNode;
+  active?: boolean;
+  disabled?: boolean;
+};
 
-export type OrderStatus = "draft" | "pending" | "approved" | "rejected" | "in_progress" | "completed" | "cancelled";
-export type PaymentMethod = "cash" | "credit_card" | "bank_transfer" | "pix" | "boleto";
-
-export interface OrderProduct {
-  id: string;
-  productId: string;
-  name: string;
-  quantity: number;
-  unitPrice: number;
-  totalPrice: number;
-}
-
-export interface Order {
-  id: string;
-  clientId: string;
-  products: OrderProduct[];
-  totalAmount: number;
-  status: OrderStatus;
-  paymentMethod: PaymentMethod;
-  deliveryDate: Date;
-  notes?: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+export type PaymentMethod = "cash" | "credit_card" | "bank_transfer" | "pix";
 
 export interface Product {
   id: string;
   name: string;
   description: string;
   price: number;
-  costPrice?: number;
   category: string;
   sku: string;
   stock: number;
@@ -37,21 +22,11 @@ export interface Product {
   updatedAt: Date;
 }
 
-export interface Client {
+export interface OrderProduct {
   id: string;
+	productId: string;
   name: string;
-  tradingName?: string;
-  legalName?: string;
-  taxId: string;
-  email: string;
-  phone: string;
-  address: string;
-  createdAt: Date;
-}
-
-export interface NavItem {
-  title: string;
-  icon: React.ReactNode;
-  href: string;
-  active: boolean;
+  unitPrice: number;
+  quantity: number;
+  totalPrice: number;
 }
