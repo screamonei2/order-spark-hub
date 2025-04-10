@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card";
 import { mockClients, formatDate } from "@/lib/mock-data";
 import { SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { X, Edit } from "lucide-react";
+import { Edit } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface ClientDetailsProps {
@@ -34,9 +34,6 @@ const ClientDetails: React.FC<ClientDetailsProps> = ({ clientId, onClose }) => {
       <SheetHeader className="mb-6">
         <SheetTitle className="flex items-center justify-between">
           <span>Detalhes do Cliente</span>
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="h-4 w-4" />
-          </Button>
         </SheetTitle>
       </SheetHeader>
 
