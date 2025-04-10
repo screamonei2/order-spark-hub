@@ -114,6 +114,7 @@ export const getPaymentMethodText = (method: PaymentMethod): string => {
     credit_card: "Cartão de Crédito",
     bank_transfer: "Transferência Bancária",
     pix: "PIX",
+    boleto: "Boleto"
   };
   return methodMap[method];
 };
@@ -125,6 +126,9 @@ export const getStatusText = (status: OrderStatus): string => {
     pending: "Aguardando Aprovação",
     approved: "Aprovado",
     rejected: "Rejeitado",
+    in_progress: "Em Progresso",
+    completed: "Concluído",
+    cancelled: "Cancelado"
   };
   return statusMap[status];
 };
@@ -136,6 +140,9 @@ export const getStatusColor = (status: OrderStatus): string => {
     pending: "bg-yellow-100 text-yellow-800",
     approved: "bg-green-100 text-green-800",
     rejected: "bg-red-100 text-red-800",
+    in_progress: "bg-blue-100 text-blue-800",
+    completed: "bg-purple-100 text-purple-800",
+    cancelled: "bg-red-100 text-red-800"
   };
   return colorMap[status];
 };

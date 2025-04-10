@@ -1,5 +1,4 @@
 
-
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { OrderStatus } from "@/types";
@@ -67,6 +66,15 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className, onChange }
         <DropdownMenuItem onClick={() => handleStatusChange("approved")}>
           {getStatusText("approved")}
         </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleStatusChange("in_progress")}>
+          {getStatusText("in_progress")}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleStatusChange("completed")}>
+          {getStatusText("completed")}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleStatusChange("cancelled")}>
+          {getStatusText("cancelled")}
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={() => handleStatusChange("rejected")}>
           {getStatusText("rejected")}
         </DropdownMenuItem>
@@ -76,4 +84,3 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className, onChange }
 };
 
 export default StatusBadge;
-
