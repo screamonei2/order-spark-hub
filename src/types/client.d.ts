@@ -16,7 +16,7 @@ export interface Client {
     state: string;
     zipCode: string;
   };
-  notes?: string; // Adding the notes field that was missing
+  notes?: string;
   createdAt: Date;
   updatedAt: Date;
 }

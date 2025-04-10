@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
@@ -71,7 +70,7 @@ const NewOrder = () => {
       ...orderProducts,
       {
         id: `temp-${Date.now()}`,
-        productId: "", // Adding the required field
+        productId: "", // Empty string initially 
         name: "",
         unitPrice: 0,
         quantity: 1,

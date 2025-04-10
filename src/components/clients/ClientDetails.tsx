@@ -29,6 +29,17 @@ const ClientDetails: React.FC<ClientDetailsProps> = ({ clientId, onClose }) => {
     );
   }
 
+  // Format the address object into a string
+  const formatAddress = (address: any) => {
+    if (typeof address === 'string') return address;
+    
+    try {
+      return `${address.street}, ${address.number}${address.complement ? ` - ${address.complement}` : ''}, ${address.neighborhood}, ${address.city}/${address.state}, ${address.zipCode}`;
+    } catch (e) {
+      return "Endereço indisponível";
+    }
+  };
+
   return (
     <div className="flex flex-col h-full">
       <SheetHeader className="mb-6">
@@ -87,7 +98,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = ({ clientId, onClose }) => {
             {client.address && (
               <div>
                 <p className="text-sm text-muted-foreground">Endereço</p>
-                <p className="font-medium">{client.address}</p>
+                <p className="font-medium">{formatAddress(client.address)}</p>
               </div>
             )}
             {client.notes && (

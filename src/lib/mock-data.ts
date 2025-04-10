@@ -13,8 +13,17 @@ export const mockClients: Client[] = [
     taxId: "12.345.678/0001-99",
     email: "contato@techsoft.com",
     phone: "(11) 4321-9876",
-    address: "Av. Tecnologia, 123 - São Paulo/SP",
+    address: {
+      street: "Av. Tecnologia",
+      number: "123",
+      neighborhood: "Centro",
+      city: "São Paulo",
+      state: "SP",
+      zipCode: "01234-567"
+    },
+    notes: "Cliente desde 2020",
     createdAt: new Date("2023-01-15"),
+    updatedAt: new Date("2023-01-15"),
   },
   {
     id: "c2",
@@ -24,8 +33,17 @@ export const mockClients: Client[] = [
     taxId: "98.765.432/0001-01",
     email: "contato@mercadocentral.com",
     phone: "(11) 1234-5678",
-    address: "Rua do Comércio, 456 - São Paulo/SP",
+    address: {
+      street: "Rua do Comércio",
+      number: "456",
+      neighborhood: "Jardins",
+      city: "São Paulo",
+      state: "SP",
+      zipCode: "04567-890"
+    },
+    notes: "Cliente premium",
     createdAt: new Date("2023-02-20"),
+    updatedAt: new Date("2023-02-20"),
   },
   {
     id: "c3",
@@ -35,8 +53,17 @@ export const mockClients: Client[] = [
     taxId: "45.678.901/0001-23",
     email: "contato@abcconstrucoes.com",
     phone: "(11) 9876-5432",
-    address: "Rua da Construção, 789 - São Paulo/SP",
+    address: {
+      street: "Rua da Construção",
+      number: "789",
+      neighborhood: "Vila Operária",
+      city: "São Paulo",
+      state: "SP",
+      zipCode: "08765-432"
+    },
+    notes: "Grandes projetos",
     createdAt: new Date("2023-03-10"),
+    updatedAt: new Date("2023-03-10"),
   },
 ];
 

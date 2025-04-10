@@ -17,7 +17,7 @@ interface NewClientModalProps {
 }
 
 const NewClientModal: React.FC<NewClientModalProps> = ({ open, onOpenChange }) => {
-  const handleSubmit = (values: Omit<Client, "id" | "createdAt">) => {
+  const handleSubmit = (values: Omit<Client, "id" | "createdAt" | "updatedAt">) => {
     console.log("New client values:", values);
     
     // In a real app, you would call an API to create the client
@@ -26,6 +26,7 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ open, onOpenChange }) =
       ...values,
       id: `c${mockClients.length + 1}`,
       createdAt: new Date(),
+      updatedAt: new Date(),
     };
     
     // Here you would normally add the client to your state or context

@@ -13,7 +13,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
+import { Textarea } from "@/components/ui/textarea";
+import { Client } from "@/types";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -30,15 +31,24 @@ const formSchema = z.object({
   }),
   email: z.string().email({
     message: "Email inválido",
-  }).optional(),
-  phone: z.string().optional(),
-  address: z.string().optional(),
+  }).optional().or(z.literal('')),
+  phone: z.string().optional().or(z.literal('')),
+  address: z.object({
+    street: z.string().min(1, "Rua é obrigatória"),
+    number: z.string().min(1, "Número é obrigatório"),
+    complement: z.string().optional().or(z.literal('')),
+    neighborhood: z.string().min(1, "Bairro é obrigatório"),
+    city: z.string().min(1, "Cidade é obrigatória"),
+    state: z.string().min(1, "Estado é obrigatório"),
+    zipCode: z.string().min(1, "CEP é obrigatório"),
+  }),
+  notes: z.string().optional().or(z.literal('')),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 interface ClientFormProps {
-  onSubmit: (values: FormValues) => void;
+  onSubmit: (values: Omit<Client, "id" | "createdAt" | "updatedAt">) => void;
   initialValues?: Partial<FormValues>;
   submitButtonText?: string;
 }
@@ -57,7 +67,16 @@ const ClientForm: React.FC<ClientFormProps> = ({
       taxId: "",
       email: "",
       phone: "",
-      address: "",
+      address: {
+        street: "",
+        number: "",
+        complement: "",
+        neighborhood: "",
+        city: "",
+        state: "",
+        zipCode: "",
+      },
+      notes: "",
       ...initialValues,
     },
   });
@@ -149,19 +168,118 @@ const ClientForm: React.FC<ClientFormProps> = ({
             )}
           />
         </div>
+        
+        <div className="space-y-4">
+          <h3 className="text-md font-medium">Endereço</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="address.street"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Rua</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nome da rua" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address.number"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Número</FormLabel>
+                  <FormControl>
+                    <Input placeholder="123" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address.complement"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Complemento</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Sala, apto, etc." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address.neighborhood"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bairro</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nome do bairro" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address.city"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cidade</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nome da cidade" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address.state"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Estado</FormLabel>
+                  <FormControl>
+                    <Input placeholder="UF" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address.zipCode"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>CEP</FormLabel>
+                  <FormControl>
+                    <Input placeholder="00000-000" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+        
         <FormField
           control={form.control}
-          name="address"
+          name="notes"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Endereço</FormLabel>
+              <FormLabel>Observações</FormLabel>
               <FormControl>
-                <Input placeholder="Endereço completo" {...field} />
+                <Textarea placeholder="Informações adicionais..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        
         <Button type="submit" className="w-full">
           {submitButtonText}
         </Button>

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -45,6 +44,7 @@ const paymentMethodOptions: { value: PaymentMethod; label: string }[] = [
   { value: "credit_card", label: "Cartão de Crédito" },
   { value: "bank_transfer", label: "Transferência Bancária" },
   { value: "pix", label: "PIX" },
+  { value: "boleto", label: "Boleto" },
 ];
 
 const NewOrderModal: React.FC<NewOrderModalProps> = ({ open, onOpenChange }) => {
@@ -61,6 +61,7 @@ const NewOrderModal: React.FC<NewOrderModalProps> = ({ open, onOpenChange }) => 
   const handleAddProduct = () => {
     const newProduct: OrderProduct = {
       id: `temp-${Date.now()}`,
+      productId: "",
       name: "",
       unitPrice: 0,
       quantity: 1,
@@ -88,10 +89,8 @@ const NewOrderModal: React.FC<NewOrderModalProps> = ({ open, onOpenChange }) => 
       }
     }
     
-    // Update the specified field
     (product[field] as any) = value;
     
-    // Recalculate total price if needed
     if (field === "quantity" || field === "unitPrice" || field === "productId") {
       product.totalPrice = product.quantity * product.unitPrice;
     }
@@ -103,7 +102,6 @@ const NewOrderModal: React.FC<NewOrderModalProps> = ({ open, onOpenChange }) => 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validation
     if (!clientId) {
       toast.error("Por favor, selecione um cliente");
       return;
@@ -124,10 +122,8 @@ const NewOrderModal: React.FC<NewOrderModalProps> = ({ open, onOpenChange }) => 
       return;
     }
     
-    // Here you would normally submit the data to your backend
     toast.success("Pedido criado com sucesso!");
     
-    // Reset form and close modal
     resetForm();
     onOpenChange(false);
   };
